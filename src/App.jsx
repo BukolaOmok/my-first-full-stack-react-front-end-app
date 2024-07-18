@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import TimeZoneDisplay from "./TimeZoneDisplay";
+import "./App.css";
 
 function App() {
   const [timeZones, setTimeZones] = useState([]);
@@ -8,7 +9,7 @@ function App() {
   useEffect(() => {
     const fetchTimeZones = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/timezones");
+        const response = await axios.get("https://my-first-full-stack-react-app-backend.onrender.com/timezones");
         setTimeZones(
           response.data.map((tz) => ({
             ...tz,
