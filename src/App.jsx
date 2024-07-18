@@ -13,7 +13,7 @@ function App() {
         setTimeZones(
           response.data.map((tz) => ({
             ...tz,
-            time: calculateLocalTime(tz.utc_offset),
+            time: calculateLocalTime(tz.utcoffset),
           }))
         );
       } catch (error) {
