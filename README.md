@@ -1,4 +1,3 @@
-# React + Vite
 
 This is my first full stack app. I have connected this react front end to the server using an API hosted on RENDER.com 
 
