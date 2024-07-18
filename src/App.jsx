@@ -1,27 +1,51 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import TimeZoneDisplay from "./TimeZoneDisplay";
 import "./App.css";
 
 function App() {
   const [timeZones, setTimeZones] = useState([]);
+  const [newCity, setNewCity] = useState("");
+  const [newOffset, setNewOffset] = useState("");
 
-  useEffect(() => {
-    const fetchTimeZones = async () => {
-      try {
-        const response = await axios.get("https://my-first-full-stack-react-app-backend.onrender.com/timezones");
-        setTimeZones(
-          response.data.map((tz) => ({
-            ...tz,
-            time: calculateLocalTime(tz.utcoffset),
-          }))
-        );
-      } catch (error) {
-        console.error("Failed to fetch time zones:", error);
-      }
-    };
-    fetchTimeZones();
-  }, []);
+  const fetchTimeZones = async () => {
+    try {
+      const response = await axios.get(
+        "https://my-first-full-stack-react-app-backend.onrender.com/timezones"
+      );
+      setTimeZones(
+        response.data.map((tz) => ({
+          ...tz,
+          time: calculateLocalTime(tz.utcoffset),
+        }))
+      );
+    } catch (error) {
+      console.error("Failed to fetch time zones:", error);
+    }
+  };
+
+  const addTimeZone = async () => {
+    try {
+      const response = await axios.post(
+        "https://my-first-full-stack-react-app-backend.onrender.com/timezones",
+        {
+          city: newCity,
+          utcoffset: parseInt(newOffset, 10),
+        }
+      );
+      setTimeZones([
+        ...timeZones,
+        {
+          ...response.data,
+          time: calculateLocalTime(response.data.utcoffset),
+        },
+      ]);
+      setNewCity("");
+      setNewOffset("");
+    } catch (error) {
+      console.error("Failed to add timezone:", error);
+    }
+  };
 
   function calculateLocalTime(offset) {
     const date = new Date();
@@ -34,15 +58,32 @@ function App() {
       localHours += 24;
     }
 
-    return `${localHours.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}`;
+    return `${localHours.toString().padStart(2, "0")}:${mins
+      .toString()
+      .padStart(2, "0")}`;
   }
 
   return (
     <div>
       <h1>Some Global Time Zones:</h1>
-      {timeZones.map((tz) => (
-        <TimeZoneDisplay key={tz.id} city={tz.city} time={tz.time} />
-      ))}
+      <button className = "button" onClick={fetchTimeZones}>Load Time Zones</button>
+      <div>
+        {timeZones.map((tz) => (
+          <TimeZoneDisplay key={tz.id} city={tz.city} time={tz.time} />
+        ))}
+
+        <textarea
+          value={newCity}
+          onChange={(e) => setNewCity(e.target.value)}
+          placeholder="Enter city name"
+        />
+        <textarea
+          value={newOffset}
+          onChange={(e) => setNewOffset(e.target.value)}
+          placeholder="Enter UTC offset"
+        />
+        <button className = "button" onClick = {addTimeZone}>Add A Time Zone</button>
+      </div>
     </div>
   );
 }
