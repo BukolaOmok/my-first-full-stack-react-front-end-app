@@ -1,5 +1,5 @@
 
-This is my first full stack app. I have connected this react front end to the server using an API hosted on RENDER.com 
+This is my first full stack app. I have connected this react front end (hosted on NETLIFY) to the server using an API hosted on RENDER.com 
 
 Backend API Link - https://github.com/BukolaOmok/my-first-full-stack-react-app-backend.git
 Render.com Link - https://my-first-full-stack-react-app-backend.onrender.com/
