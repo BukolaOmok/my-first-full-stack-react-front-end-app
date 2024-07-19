@@ -3,6 +3,11 @@ import axios from "axios";
 import TimeZoneDisplay from "./TimeZoneDisplay";
 import "./App.css";
 
+const apiBaseURL = import.meta.env.VITE_API_BASE_URL;
+if (!apiBaseURL) {
+    throw new Error("missing import.meta.env.VITE_API_BASE_URL");
+}
+
 function App() {
   const [timeZones, setTimeZones] = useState([]);
   const [newCity, setNewCity] = useState("");
@@ -10,8 +15,8 @@ function App() {
 
   const fetchTimeZones = async () => {
     try {
-      const response = await axios.get(
-        "https://my-first-full-stack-react-app-backend.onrender.com/timezones"
+      const url = apiBaseURL + "/timezones";
+      const response = await axios.get(url
       );
       setTimeZones(
         response.data.map((tz) => ({
@@ -26,8 +31,8 @@ function App() {
 
   const addTimeZone = async () => {
     try {
-      const response = await axios.post(
-        "https://my-first-full-stack-react-app-backend.onrender.com/timezones",
+      const url = apiBaseURL + "/timezones";
+      const response = await axios.post(url,
         {
           city: newCity,
           utcoffset: parseInt(newOffset, 10),
